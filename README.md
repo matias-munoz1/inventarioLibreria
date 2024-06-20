@@ -79,6 +79,29 @@ Maneja errores durante la actualización de tareas.
 **Cobertura de las Pruebas**
 Se ha utilizado Jest para asegurar una alta cobertura de código en las pruebas unitarias. Los resultados de la cobertura se pueden visualizar al ejecutar el comando de pruebas.
 
+## Endpoints de la API
+
+- Obtener todas las tareas
+```
+GET /tasks
+```
+- Obtener una tarea por ID
+```
+GET /tasks/:id
+```
+- Crear una nueva tarea
+```
+POST /tasks
+```
+- Actualizar una tarea existente
+```
+PUT /tasks/:id
+```
+- Eliminar una tarea
+```
+DELETE /tasks/:id
+```
+
 ## Estructura del Proyecto
 - controllers/: Contiene los controladores de las rutas.
 - models/: Contiene los modelos de la base de datos.
