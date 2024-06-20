@@ -4,7 +4,7 @@
 
 ## Descripción
 
-Este proyecto es un backend para la gestión de tareas. Incluye endpoints para crear, leer, actualizar y eliminar tareas. El proyecto está configurado con ESLint, Prettier, Husky, y pruebas unitarias con Jest.
+Este proyecto es un backend para la gestión de tareas. Incluye endpoints para crear, leer, actualizar y eliminar tareas (CRUD). El proyecto está configurado con ESLint, Prettier, Husky, y pruebas unitarias con Jest.
 
 ## Requisitos Previos
 
