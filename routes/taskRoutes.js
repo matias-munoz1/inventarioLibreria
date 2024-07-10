@@ -14,7 +14,6 @@ const router = express.Router();
 // Ruta para obtener todas las tareas
 router.get('/tasks', getAllTasks);
 
-// Ruta para obtener una tarea por ID
 router.get('/tasks/:id', getTaskById);
 
 // Ruta para crear una nueva tarea con validación de datos
