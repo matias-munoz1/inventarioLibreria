@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "todo_user",
+    "password": "secure_password",
+    "database": "project_database",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "todo_user",
+    "password": "secure_password",
+    "database": "project_database",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "todo_user",
+    "password": "secure_password",
+    "database": "project_database",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
