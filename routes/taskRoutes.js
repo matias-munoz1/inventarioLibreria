@@ -1,3 +1,4 @@
+// taskRoutes.js
 import express from 'express';
 import { check, validationResult } from 'express-validator';
 import {
@@ -29,6 +30,9 @@ router.post(
       .notEmpty()
       .withMessage('Description is required and should be a string'),
     check('status').isBoolean().withMessage('Status should be a boolean'),
+    check('stock')
+      .isInt({ min: 0 })
+      .withMessage('Stock should be a non-negative integer'),
   ],
   (req, res, next) => {
     const errors = validationResult(req);
@@ -53,6 +57,9 @@ router.put(
       .notEmpty()
       .withMessage('Description is required and should be a string'),
     check('status').isBoolean().withMessage('Status should be a boolean'),
+    check('stock')
+      .isInt({ min: 0 })
+      .withMessage('Stock should be a non-negative integer'),
   ],
   (req, res, next) => {
     const errors = validationResult(req);

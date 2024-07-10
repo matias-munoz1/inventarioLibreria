@@ -28,14 +28,20 @@ export const getTaskById = async (req, res) => {
 // Crea una nueva tarea
 export const createTask = async (req, res) => {
   try {
-    const { title, description, status } = req.body;
+    const { title, description, status, stock } = req.body;
     const tasks = await Task.findAll({ attributes: ['id'] });
     const ids = tasks.map((task) => task.id);
     let newId = 1;
     while (ids.includes(newId)) {
       newId++;
     }
-    const task = await Task.create({ id: newId, title, description, status });
+    const task = await Task.create({
+      id: newId,
+      title,
+      description,
+      status,
+      stock,
+    });
     res.status(201).json(task);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -46,12 +52,13 @@ export const createTask = async (req, res) => {
 export const updateTask = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, status } = req.body;
+    const { title, description, status, stock } = req.body;
     const task = await Task.findByPk(id);
     if (task) {
       task.title = title;
       task.description = description;
       task.status = status;
+      task.stock = stock;
       await task.save();
       res.status(200).json(task);
     } else {
