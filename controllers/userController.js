@@ -1,48 +1,85 @@
 import { User } from '../models/user.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// Ruta del archivo JSON donde se guardarán los datos de los usuarios
-const usersFilePath = path.join(__dirname, '..', 'data', 'users.json');
 
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Busca el usuario por correo electrónico
     let user = await User.findOne({ where: { email } });
 
     if (!user) {
-      // Si el usuario no existe, crea uno nuevo
       const hashedPassword = await bcrypt.hash(password, 10);
       user = await User.create({ email, password: hashedPassword });
     } else {
-      // Verifica la contraseña
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
         return res.status(401).json({ message: 'Invalid email or password' });
       }
     }
 
-    // Guarda el usuario en el archivo JSON
-    let users = [];
-    if (fs.existsSync(usersFilePath)) {
-      const usersData = fs.readFileSync(usersFilePath, 'utf8');
-      users = JSON.parse(usersData);
-    }
-    users.push({ email: user.email, password });
-    fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2), 'utf8');
+    const token = jwt.sign({ id: user.id, email: user.email }, 'secret_key', {
+      expiresIn: '1h',
+    });
 
-    // Devuelve la información del usuario logueado
-    res.status(200).json({ message: 'Login successful', user });
+    res.status(200).json({ message: 'Bienvenido!', user, token });
   } catch (error) {
-    console.error('Server error:', error); // Log para depuración
+    console.error('Server error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+export const deleteUsers = async (req, res) => {
+  const { emails } = req.body;
+
+  try {
+    const users = await User.findAll({ where: { email: emails } });
+
+    if (users.length === 0) {
+      return res.status(404).json({ message: 'No users found' });
+    }
+
+    await User.destroy({ where: { email: emails } });
+
+    const deletedUsers = users.map((user) => ({
+      id: user.id,
+      email: user.email,
+      password: user.password,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    }));
+
+    const filePath = path.join(__dirname, '..', 'deletedUsers.json');
+    fs.writeFileSync(filePath, JSON.stringify(deletedUsers, null, 2), 'utf-8');
+
+    res
+      .status(200)
+      .json({ message: 'Users deleted successfully', deletedUsers });
+  } catch (error) {
+    console.error('Server error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.findAll();
+    res.status(200).json(users);
+  } catch (error) {
+    console.error('Server error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// Nueva función para eliminar todos los usuarios
+export const deleteAllUsers = async (req, res) => {
+  try {
+    await User.destroy({ where: {}, truncate: true });
+    res.status(200).json({ message: 'All users deleted successfully' });
+  } catch (error) {
+    console.error('Server error:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };

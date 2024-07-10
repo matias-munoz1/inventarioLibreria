@@ -2,16 +2,16 @@ import express from 'express';
 import cors from 'cors';
 import sequelize from './config/database.js';
 import taskRoutes from './routes/taskRoutes.js';
-import userRoutes from './routes/userRoutes.js'; // Importa las rutas de usuario
+import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors()); // Permitir CORS
+app.use(cors());
 app.use(express.json());
 
+app.use('/api', userRoutes);
 app.use('/api', taskRoutes);
-app.use('/api', userRoutes); // Usa las rutas de usuario con el prefijo '/api'
 
 app.listen(PORT, async () => {
   console.log(`Server is running on port ${PORT}`);
