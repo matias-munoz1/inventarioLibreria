@@ -26,6 +26,12 @@ const Book = sequelize.define(
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
+    category: {
+      type: DataTypes.STRING,
+    },
+    publisher: {
+      type: DataTypes.STRING,
+    },
   },
   {
     tableName: 'books',
