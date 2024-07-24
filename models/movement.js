@@ -1,3 +1,4 @@
+// models/Movement.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
 
@@ -8,10 +9,6 @@ const Movement = sequelize.define(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
-    },
-    bookId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
     },
     fromCity: {
       type: DataTypes.STRING,
@@ -27,11 +24,12 @@ const Movement = sequelize.define(
     },
     createdAt: {
       type: DataTypes.DATE,
+      allowNull: false,
       defaultValue: DataTypes.NOW,
     },
-    updatedAt: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   },
   {

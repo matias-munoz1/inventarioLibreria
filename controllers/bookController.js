@@ -52,10 +52,10 @@ export const updateBook = async (req, res) => {
     // Registra el movimiento si la ciudad ha cambiado
     if (book.city !== city) {
       await Movement.create({
-        bookId: book.id,
         fromCity: book.city,
         toCity: city,
         stock: book.stock,
+        title: book.title,
       });
     }
 
@@ -74,6 +74,7 @@ export const updateBook = async (req, res) => {
   }
 };
 
+// Obtener todos los movimientos
 export const getAllMovements = async (req, res) => {
   try {
     const movements = await Movement.findAll({
