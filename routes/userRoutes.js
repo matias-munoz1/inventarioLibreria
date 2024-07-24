@@ -1,3 +1,4 @@
+// routes/userRoutes.js
 import express from 'express';
 import { check, validationResult } from 'express-validator';
 import {
@@ -5,7 +6,7 @@ import {
   deleteUsers,
   getAllUsers,
   deleteAllUsers,
-} from '../controllers/usercontroller.js';
+} from '../controllers/userController.js';
 
 const router = express.Router();
 
@@ -31,10 +32,8 @@ router.delete(
   deleteUsers
 );
 
-// Nueva ruta para obtener todos los usuarios
 router.get('/users', getAllUsers);
 
-// Nueva ruta para eliminar todos los usuarios
 router.delete('/users', deleteAllUsers);
 
 export default router;

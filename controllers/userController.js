@@ -1,3 +1,4 @@
+// controllers/userController.js
 import { User } from '../models/user.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -8,16 +9,15 @@ export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    let user = await User.findOne({ where: { email } });
+    const user = await User.findOne({ where: { email } });
 
     if (!user) {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      user = await User.create({ email, password: hashedPassword });
-    } else {
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-      if (!isPasswordValid) {
-        return res.status(401).json({ message: 'Invalid email or password' });
-      }
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
 
     const token = jwt.sign({ id: user.id, email: user.email }, 'secret_key', {
@@ -73,7 +73,6 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-// Nueva función para eliminar todos los usuarios
 export const deleteAllUsers = async (req, res) => {
   try {
     await User.destroy({ where: {}, truncate: true });
