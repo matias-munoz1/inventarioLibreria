@@ -1,19 +1,23 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
 
-const Book = sequelize.define(
-  'Book',
+const Movement = sequelize.define(
+  'Movement',
   {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    title: {
+    bookId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    fromCity: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    description: {
+    toCity: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -21,24 +25,18 @@ const Book = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    status: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
     },
-    category: {
-      type: DataTypes.STRING,
-    },
-    publisher: {
-      type: DataTypes.STRING,
-    },
-    city: {
-      type: DataTypes.STRING, // Agrega este campo
-      allowNull: false,
+    updatedAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
     },
   },
   {
-    tableName: 'books',
+    tableName: 'movements',
   }
 );
 
-export default Book;
+export default Movement;

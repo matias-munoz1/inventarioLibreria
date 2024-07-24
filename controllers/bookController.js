@@ -1,4 +1,5 @@
 import Book from '../models/book.js';
+import Movement from '../models/movement.js';
 
 // Obtener todos los libros
 export const getAllBooks = async (req, res) => {
@@ -38,20 +39,47 @@ export const createBook = async (req, res) => {
 
 // Actualizar un libro existente
 export const updateBook = async (req, res) => {
+  const { id } = req.params;
+  const { title, description, stock, status, category, publisher, city } =
+    req.body;
+
   try {
-    const { id } = req.params;
-    const { title, description, stock, status } = req.body;
     const book = await Book.findByPk(id);
-    if (book) {
-      book.title = title;
-      book.description = description;
-      book.stock = stock;
-      book.status = status;
-      await book.save();
-      res.status(200).json(book);
-    } else {
-      res.status(400).json({ message: 'Book not found' });
+    if (!book) {
+      return res.status(404).json({ message: 'Book not found' });
     }
+
+    // Registra el movimiento si la ciudad ha cambiado
+    if (book.city !== city) {
+      await Movement.create({
+        bookId: book.id,
+        fromCity: book.city,
+        toCity: city,
+        stock: book.stock,
+      });
+    }
+
+    book.title = title;
+    book.description = description;
+    book.stock = stock;
+    book.status = status;
+    book.category = category;
+    book.publisher = publisher;
+    book.city = city;
+
+    await book.save();
+    res.status(200).json({ message: 'Book updated successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getAllMovements = async (req, res) => {
+  try {
+    const movements = await Movement.findAll({
+      order: [['createdAt', 'DESC']],
+    });
+    res.status(200).json(movements);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

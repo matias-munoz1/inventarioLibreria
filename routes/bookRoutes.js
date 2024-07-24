@@ -1,4 +1,3 @@
-// routes/bookRoutes.js
 import express from 'express';
 import {
   getAllBooks,
@@ -6,6 +5,7 @@ import {
   createBook,
   updateBook,
   deleteBook,
+  getAllMovements, // Importa el controlador para obtener movimientos
 } from '../controllers/bookController.js';
 import { authenticate, authorize } from '../middlewares/auth.js';
 
@@ -35,6 +35,14 @@ router.delete(
   authenticate,
   authorize(['editor', 'admin']),
   deleteBook
+);
+
+// Ruta para obtener todos los movimientos
+router.get(
+  '/movements',
+  authenticate,
+  authorize(['viewer', 'editor', 'admin']),
+  getAllMovements
 );
 
 export default router;
